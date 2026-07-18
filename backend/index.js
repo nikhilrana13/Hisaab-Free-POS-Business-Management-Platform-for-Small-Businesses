@@ -3,6 +3,7 @@ import cors from "cors"
 import cookieParser from "cookie-parser" 
 import dotenv from "dotenv"
 import { configure } from "./config/db.js"
+import AuthRoutes from "./routes/auth.Routes.js"
 
 dotenv.config()
 
@@ -17,8 +18,8 @@ app.use(cookieParser())
 
 
 
-// routes 
-
+// routes  
+app.use("/api/auth",AuthRoutes)
 
 
 // connect to db
@@ -30,3 +31,4 @@ configure()
 app.listen(PORT,()=>{
     console.log(`Server is running in ${PORT}`)
 })
+
