@@ -55,7 +55,7 @@ export const Login = async(req,res)=>{
              user.isActive = true,
              await user.save()
              // generate jwt 
-             const token = await jwt.sign({_id:user._id},process.env.JWT_SECRET_KEY,{expiresIn:"1day"})
+             const token = await jwt.sign({id:user._id},process.env.JWT_SECRET_KEY,{expiresIn:"1day"})
              res.cookie("token",token,{httpOnly:true,secure:true,sameSite:"none"})
             return Response(res,200,"Login successfully",{user,token})
         }else{
