@@ -19,9 +19,9 @@ export const uploadToImageKit = async (file,folder) => {
     throw new Error("Images upload failed");
   }
 };
-export const deleteFromImageKit = async (file) => {
+export const deleteFromImageKit = async (fileId) => {
   try {
-        await imagekit.deleteFile(file.fileId);
+        await imagekit.files.delete(fileId);
     // console.log("File deleted successfully");
   } catch (error) {
     console.error("Error deleting files from ImageKit:", error);
