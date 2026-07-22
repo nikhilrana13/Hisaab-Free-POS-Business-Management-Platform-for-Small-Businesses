@@ -2,10 +2,7 @@ import Product from "../models/productModel.js";
 import User from "../models/userModel.js";
 import { deleteFromImageKit, uploadToImageKit } from "../utils/helpers.js";
 import { Response } from "../utils/responseHandler.js";
-import {
-  safeParse,
-  ValidateProductPriceOptions,
-} from "../validations/product.Validations.js";
+import {safeParse,ValidateProductPriceOptions,} from "../validations/product.Validations.js";
 
 // Add product
 export const AddProduct = async (req, res) => {
@@ -227,6 +224,4 @@ export const DeleteProduct = async (req, res) => {
     console.error("failed to deleted product", error);
     return Response(res, 500, "Internal server error");
   }
-};
-
-
+}; 

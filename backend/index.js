@@ -6,6 +6,7 @@ import { configure } from "./config/db.js"
 import AuthRoutes from "./routes/auth.Routes.js"
 import userRoutes from "./routes/user.Routes.js"
 import ProductRoute from "./routes/product.Routes.js"
+import OrderRoute from "./routes/order.Routes.js"
 import { errorHandler } from "./middlewares/errorMiddleware.js"
 
 dotenv.config()
@@ -26,6 +27,7 @@ app.use(cookieParser())
 app.use("/api/auth",AuthRoutes)
 app.use("/api/user",userRoutes)
 app.use("/api/products",ProductRoute)
+app.use("/api/orders",OrderRoute)
 // Global Error Handler
 app.use(errorHandler)
 
