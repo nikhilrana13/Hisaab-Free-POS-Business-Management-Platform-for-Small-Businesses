@@ -3,6 +3,7 @@ import bcrypt from "bcrypt"
 import { Response } from "../utils/responseHandler.js"
 import User from "../models/userModel.js"
 import jwt from "jsonwebtoken"
+import {UserMapper} from "../mappers/userMapper.js"
 
 
 // sign up user 
@@ -57,7 +58,7 @@ export const Login = async(req,res)=>{
              // generate jwt 
              const token = await jwt.sign({id:user._id},process.env.JWT_SECRET_KEY,{expiresIn:"1day"})
              res.cookie("token",token,{httpOnly:true,secure:true,sameSite:"none"})
-            return Response(res,200,"Login successfully",{user,token})
+            return Response(res,200,"Login successfully",{user:UserMapper(user),token})
         }else{
              return Response(res,400,"User not found ! Please register first")
         }

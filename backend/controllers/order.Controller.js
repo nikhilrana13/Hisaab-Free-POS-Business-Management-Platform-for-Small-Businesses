@@ -4,6 +4,7 @@ import Order from "../models/orderModel.js";
 import { Response } from "../utils/responseHandler.js";
 import { OrderProductValidation } from "../validations/order.Validations.js";
 import { safeParse } from "../validations/product.Validations.js";
+import moment from "moment-timezone"
 
 // create order
 export const CreateOrder = async (req, res) => {
@@ -82,8 +83,76 @@ export const CreateOrder = async (req, res) => {
     });
     return Response(res, 201, "Order created successfully", { order });
   } catch (error) {
-    console.error(error);
-    return Response(res, 500, "Something went wrong while creating order");
+    console.error("Something went wrong while creating order", error);
+    return Response(res, 500, "Internal server error");
+  }
+};
+// get all orders
+export const GetAllOrders = async (req, res) => {
+  try {
+    const userId = req.user;
+    let { paymentMethod, page = 1, limit = 6, range } = req.query;
+    page = parseInt(page);
+    limit = parseInt(limit);
+    const skip = (page - 1) * limit;
+
+    // check user exists or not
+    const user = await User.findById(userId).select("isOnboarded");
+    if (!user) {
+      return Response(res, 404, "User not found");
+    }
+    if (!user.isOnboarded) {
+      return Response(res, 400, "Please complete Onboarding");
+    }
+    const allowedPaymentmethod = ["cash", "upi"];
+    const allowedRanges = ["today", "week", "month"];
+    if (range && !allowedRanges.includes(range)) {
+      return Response(res, 400, "Invalid range");
+    }
+    if (paymentMethod && !allowedPaymentmethod.includes(paymentMethod)) {
+      return Response(res, 400, "Enter valid payment method");
+    }
+    // filter
+    let filter = { ownerId: userId };
+    if (paymentMethod) {
+      filter.paymentMethod = paymentMethod;
+    }
+    // find today and this week order
+    const start = moment().tz("Asia/Kolkata").startOf("day").toDate();
+    const end = moment().tz("Asia/Kolkata").endOf("day").toDate();
+    const startOfweek = moment().tz("Asia/Kolkata").startOf("isoWeek").toDate();
+    const endOfweek = moment().tz("Asia/Kolkata").endOf("isoWeek").toDate();
+    const startOfmonth = moment().tz("Asia/Kolkata").startOf("month").toDate();
+    const endOfmonth = moment().tz("Asia/Kolkata").endOf("month").toDate();
+
+    if (range === "today") {
+      filter.createdAt = { $gte: start, $lte: end };
+    }
+    // this week
+    if (range === "week") {
+      filter.createdAt = { $gte: startOfweek, $lte: endOfweek };
+    }
+    // this month
+    if (range === "month") {
+      filter.createdAt = { $gte: startOfmonth, $lte: endOfmonth };
+    }
+    const [Orders, totalOrders] = await Promise.all([
+      Order.find(filter).skip(skip).sort({ createdAt: -1 }).limit(limit),
+      Order.countDocuments(filter),
+    ]);
+    const totalPages = Math.ceil(totalOrders / limit);
+    return Response(res, 200, "Orders found successfully", {
+      Orders,
+      pagination: {
+        currentPage: page,
+        totalOrders,
+        totalPages,
+        limit,
+      },
+    });
+  } catch (error) {
+    console.error("failed to get Orders", error);
+    return Response(res, 500, "Internal server error");
   }
 };
 
