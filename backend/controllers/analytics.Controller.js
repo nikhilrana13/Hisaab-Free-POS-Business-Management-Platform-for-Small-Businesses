@@ -203,7 +203,6 @@ export const AnalyticsOverview = async (req, res) => {
         : Number(
             (((currentMonth - previousMonth) / previousMonth) * 100).toFixed(1),
           );
-
     return Response(res, 200, "Analytics fetched successfully", {
       stats: {
         todaySales: analytics[0].summary[0]?.todaySales || 0,
