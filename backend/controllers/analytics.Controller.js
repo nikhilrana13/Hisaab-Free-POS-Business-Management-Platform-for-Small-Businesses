@@ -75,6 +75,7 @@ export const DashboardStats = async (req, res) => {
 export const AnalyticsOverview = async (req, res) => {
   try {
     const userId = req.user;
+    const { range = "today" } = req.query;
     // Check user
     const user = await User.findById(userId).select("isOnboarded");
     if (!user) {
@@ -83,14 +84,28 @@ export const AnalyticsOverview = async (req, res) => {
     if (!user.isOnboarded) {
       return Response(res, 400, "Please complete Onboarding");
     }
-    const todayStart = moment().tz("Asia/Kolkata").startOf("day").toDate();
-    const todayEnd = moment().tz("Asia/Kolkata").endOf("day").toDate();
-    const last12Months = moment()
-      .tz("Asia/Kolkata")
-      .subtract(11, "months")
-      .startOf("month")
-      .toDate();
 
+    let start;
+    let end = moment().tz("Asia/Kolkata").endOf("day").toDate();
+
+    switch (range) {
+      case "today":
+        start = moment().tz("Asia/Kolkata").startOf("day").toDate();
+        break;
+
+      case "week":
+        start = moment().tz("Asia/Kolkata").startOf("isoWeek").toDate();
+        break;
+
+      case "month":
+        start = moment().tz("Asia/Kolkata").startOf("month").toDate();
+        break;
+
+      default:
+        return Response(res, 400, "Invalid range");
+    }
+    const last12Months = moment().tz("Asia/Kolkata").subtract(11, "months").startOf("month").toDate();
+    // analytics aggregate pipeline 
     const analytics = await Order.aggregate([
       {
         $match: {
@@ -104,18 +119,18 @@ export const AnalyticsOverview = async (req, res) => {
             {
               $match: {
                 createdAt: {
-                  $gte: todayStart,
-                  $lte: todayEnd,
+                  $gte: start,
+                  $lte: end,
                 },
               },
             },
             {
               $group: {
                 _id: null,
-                todaySales: {
+                totalSales: {
                   $sum: "$totalPrice",
                 },
-                todayOrders: {
+                totalOrders: {
                   $sum: 1,
                 },
                 averageOrderValue: {
@@ -153,6 +168,61 @@ export const AnalyticsOverview = async (req, res) => {
                 "_id.year": 1,
                 "_id.month": 1,
               },
+            },
+          ],
+          // payment split
+          paymentSplit: [
+            {
+              $match: {
+                createdAt: {
+                  $gte: start,
+                  $lte: end,
+                },
+              },
+            },
+            {
+              $group: {
+                _id: "$paymentMethod",
+                totalSales: { $sum: "$totalPrice" },
+                totalOrders: { $sum: 1 },
+              },
+            },
+          ],
+          // top products
+          topProducts: [
+            {
+              $match: {
+                createdAt: {
+                  $gte: start,
+                  $lte: end,
+                },
+              },
+            },
+            {
+              $unwind: "$products",
+            },
+            {
+              $group: {
+                _id: "$products.product",
+
+                productName: {
+                  $first: "$products.productName",
+                },
+                quantitySold: {
+                  $sum: "$products.quantity",
+                },
+                revenue: {
+                  $sum: "$products.lineTotal",
+                },
+              },
+            },
+            {
+              $sort: {
+                quantitySold: -1,
+              },
+            },
+            {
+              $limit: 3,
             },
           ],
         },
@@ -196,24 +266,53 @@ export const AnalyticsOverview = async (req, res) => {
     // Revenue Growth %
     const currentMonth = formattedRevenue.at(-1)?.sales || 0;
     const previousMonth = formattedRevenue.at(-2)?.sales || 0;
-
     const growth =
       previousMonth === 0
         ? 0
         : Number(
             (((currentMonth - previousMonth) / previousMonth) * 100).toFixed(1),
           );
+    // payment split analytics
+    const paymentStats = analytics[0].paymentSplit;
+    const cashSales =
+      paymentStats.find((item) => item._id === "cash")?.totalSales || 0;
+    const upiSales =
+      paymentStats.find((item) => item._id === "upi")?.totalSales || 0;
+    const cashOrders =
+      paymentStats.find((item) => item._id === "cash")?.totalOrders || 0;
+    const upiOrders =
+      paymentStats.find((item) => item._id === "upi")?.totalOrders || 0;
+    // percentage
+    const totalSales = cashSales + upiSales;
+    const cashPercentage = totalSales === 0 ? 0 : Number(((cashSales / totalSales) * 100).toFixed(1));
+    const upiPercentage =
+      totalSales === 0 ? 0 : Number(((upiSales / totalSales) * 100).toFixed(1));
     return Response(res, 200, "Analytics fetched successfully", {
+      range,
       stats: {
-        todaySales: analytics[0].summary[0]?.todaySales || 0,
-        todayOrders: analytics[0].summary[0]?.todayOrders || 0,
-        averageOrderValue: Number((analytics[0].summary[0]?.averageOrderValue || 0)),
+        totalSales: analytics[0].summary[0]?.totalSales || 0,
+        totalOrders: analytics[0].summary[0]?.totalOrders || 0,
+        averageOrderValue: Number((analytics[0].summary[0]?.averageOrderValue || 0).toFixed(2)),
         growth,
       },
       monthlyRevenue: formattedRevenue,
+      paymentSplit: {
+        cash: {
+          sales: cashSales,
+          orders: cashOrders,
+          percentage: cashPercentage,
+        },
+        upi: {
+          sales: upiSales,
+          orders: upiOrders,
+          percentage: upiPercentage,
+        },
+      },
+      topProducts: analytics[0].topProducts,
     });
   } catch (error) {
     console.log("Failed to fetch analytics overview:", error);
     return Response(res, 500, "Internal server error");
   }
 };
+

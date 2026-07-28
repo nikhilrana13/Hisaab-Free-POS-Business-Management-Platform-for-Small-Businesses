@@ -1,6 +1,6 @@
 import express from "express"
 import { IsAuthenticated } from "../middlewares/isAuthenticated.js"
-import { AnalyticsOverview, DashboardStats } from "../controllers/analytics.Controller.js"
+import { AnalyticsOverview, DashboardStats} from "../controllers/analytics.Controller.js"
 const router = express.Router()
 
 
