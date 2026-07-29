@@ -169,7 +169,7 @@ export const UpdateProduct = async (req, res) => {
       );
       if (uploadedImage) {
         try {
-          await deleteFromImageKit(product.image.fileId);
+          await deleteFromImageKit(business.image.fileId);
         } catch (err) {
           console.error("Failed to delete old image:", err);
         }
