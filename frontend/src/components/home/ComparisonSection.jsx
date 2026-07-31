@@ -35,22 +35,22 @@ const ComparisonSection = () => {
             <ul className="space-y-4 font-medium text-[#475569]">
               <li className="flex items-start gap-2">
                 <span className="mt-1 text-[#ef4444]">•</span>
-                Kaccha bill and lost receipts
+                Roz ka hisaab likhne me bahut time lagta hai
               </li>
 
               <li className="flex items-start gap-2">
                 <span className="mt-1 text-[#ef4444]">•</span>
-                Daily calculation mistakes
+                  Udhaar ka record kho ya bhool jata hai
               </li>
 
               <li className="flex items-start gap-2">
                 <span className="mt-1 text-[#ef4444]">•</span>
-                Stock ka pata nahi
+                 Din ke profit ka pata nahi chalta
               </li>
 
               <li className="flex items-start gap-2">
                 <span className="mt-1 text-[#ef4444]">•</span>
-                Udhaar track karna mushkil
+                Register phat ya kho sakta hai
               </li>
             </ul>
           </div>
@@ -76,7 +76,7 @@ const ComparisonSection = () => {
                   size={18}
                   className="mt-1 shrink-0 text-[#2563eb]"
                 />
-                Professional WhatsApp/Print bills
+                 30 seconds me bill aur sale entry
               </li>
 
               <li className="flex items-start gap-2">
@@ -84,7 +84,7 @@ const ComparisonSection = () => {
                   size={18}
                   className="mt-1 shrink-0 text-[#2563eb]"
                 />
-                100% accurate daily reports
+              Udhaar aur payment ka automatic record
               </li>
 
               <li className="flex items-start gap-2">
@@ -92,7 +92,7 @@ const ComparisonSection = () => {
                   size={18}
                   className="mt-1 shrink-0 text-[#2563eb]"
                 />
-                Auto inventory tracking
+                  Roz ki kamai aur profit ek click me
               </li>
 
               <li className="flex items-start gap-2">
@@ -100,7 +100,7 @@ const ComparisonSection = () => {
                   size={18}
                   className="mt-1 shrink-0 text-[#2563eb]"
                 />
-                One-click digital khata (ledger)
+               Mobile me hamesha safe digital hisaab
               </li>
             </ul>
           </div>

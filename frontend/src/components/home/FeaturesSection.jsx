@@ -1,55 +1,53 @@
-"use client";
-
 import {ReceiptText,CloudCheck,Smartphone,Package,BookOpen,BarChart3,} from "lucide-react";
 
 const features = [
-  {
-    title: "Superfast Billing",
+   {
+    title: "Fast Billing",
     description:
-      "Scan barcode or tap screen. Bill ready in just 10 seconds. Send via WhatsApp or Print.",
+      "10 seconds me bill banao. Touch-friendly screen se bina kisi technical knowledge ke billing karo.",
     icon: ReceiptText,
     iconBg: "#eff6ff",
     iconColor: "#2563eb",
   },
   {
-    title: "Cloud Backup",
-    description:
-      "Data kabhi loss nahi hoga. Automatically synced securely to the cloud in real-time.",
-    icon: CloudCheck,
-    iconBg: "#eef2ff",
-    iconColor: "#4f46e5",
-  },
-  {
-    title: "Mobile Friendly",
-    description:
-      "Use on your smartphone, tablet, or desktop. Dukan ka data humesha aapke jeb mein.",
-    icon: Smartphone,
-    iconBg: "#ecfdf5",
-    iconColor: "#059669",
-  },
-  {
-    title: "Smart Inventory",
-    description:
-      "Low stock alerts, batch expiry tracking, and easy inwarding. No more out-of-stock.",
-    icon: Package,
-    iconBg: "#fff7ed",
-    iconColor: "#ea580c",
-  },
-  {
     title: "Digital Khata",
     description:
-      "Track customer udhaar, send payment reminders, and receive payments seamlessly.",
+      "Customer ka udhaar aur payment automatically save karo. Kisi bhi customer ka hisaab ek click me dekho.",
     icon: BookOpen,
     iconBg: "#faf5ff",
     iconColor: "#9333ea",
   },
   {
-    title: "Daily Reports",
+    title: "Daily Income Report",
     description:
-      "Galla check karein kahin se bhi. Real-time profit/loss and sales analytics.",
+      "Roz kitni sale hui aur kitna paisa kamaya, sab ek screen par. Register calculate karne ki zarurat nahi.",
     icon: BarChart3,
     iconBg: "#fdf2f8",
     iconColor: "#db2777",
+  },
+  {
+    title: "Inventory Tracking",
+    description:
+      "Kitna stock bacha hai aur kaunsa product khatam hone wala hai, Hisaab automatically track karta hai.",
+    icon: Package,
+    iconBg: "#fff7ed",
+    iconColor: "#ea580c",
+  },
+  {
+    title: "Works Everywhere",
+    description:
+      "Mobile, tablet ya laptop se apni shop ka hisaab kabhi bhi aur kahin bhi manage karo.",
+    icon: Smartphone,
+    iconBg: "#ecfdf5",
+    iconColor: "#059669",
+  },
+  {
+    title: "Safe Cloud Backup",
+    description:
+      "Phone kharab ya change ho jaye tab bhi aapka pura business data cloud me securely safe rahega.",
+    icon: CloudCheck,
+    iconBg: "#eef2ff",
+    iconColor: "#4f46e5",
   },
 ];
 

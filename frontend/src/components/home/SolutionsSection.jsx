@@ -1,24 +1,22 @@
-"use client";
-
 import { Store, ShoppingBag, UtensilsCrossed } from "lucide-react";
 
 const solutions = [
-  {
-    title: "Restaurants & Cafes",
+ {
+    title: "Sabzi & Fruit Vendors",
     description:
-      "Table management, KOT printing, modifiers, and quick Swiggy/Zomato reconciliation.",
-    icon: UtensilsCrossed,
-  },
-  {
-    title: "Kirana & Retail",
-    description:
-      "Thousands of pre-loaded FMCG barcodes, easy stock audits, and customer loyalty.",
+      "Fast billing, digital khata, daily income reports, aur stock tracking se apna roz ka hisaab aasani se manage karein.",
     icon: Store,
   },
   {
-    title: "Apparel & Boutiques",
+    title: "Chai, Juice & Food Stalls",
     description:
-      "Size/color variant management, return tracking, and thermal label printing.",
+      "Rush hours me bhi 10-second billing, customer payments aur daily sales ka complete record rakhein.",
+    icon: UtensilsCrossed,
+  },
+  {
+    title: "Kirana & Small Shops",
+    description:
+      "Inventory tracking, customer udhaar management aur daily profit reports ke saath business ko digitally manage karein.",
     icon: ShoppingBag,
   },
 ];
