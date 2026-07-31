@@ -36,7 +36,6 @@ export const SignUp = async (req,res)=>{
         return Response(res,500,"Internal server error")
     }
 }
-
 // login  
 export const Login = async(req,res)=>{
     try {
@@ -67,6 +66,17 @@ export const Login = async(req,res)=>{
         return Response(res,500,"Internal server error")
     }
 }
+// logout 
+export const Logout = async(req,res)=>{
+    try {
+        res.clearCookie("token",{httpOnly:true,secure:true,sameSite:"none"})
+        return Response(res,200,"Logout successfully")
+    } catch (error) {
+        console.error("Failed to Logout",error)
+        return Response(res,500,"Internal server error")
+    }
+}
+
 
 
 

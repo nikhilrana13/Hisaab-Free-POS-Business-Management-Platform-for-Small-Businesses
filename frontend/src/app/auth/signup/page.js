@@ -4,9 +4,38 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { api } from "@/services/api";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import { ThreeDots } from "react-loader-spinner";
 
 const page = () => {
    const [showPassword, setShowPassword] = useState(false);
+   const [loading,setLoading] = useState(false)
+   const {register,handleSubmit,formState: { errors }} = useForm()
+   const router = useRouter()
+
+   const onSubmit = async(data)=>{
+       const formData = {
+          fullname:data.fullname,
+          email:data.email, 
+          password:data.password
+       }
+    try {
+        setLoading(true)
+         const response = await api.post("/api/auth/sign-up",formData)
+         if(response){
+           toast.success(response?.message)
+           router.replace("/auth/login")
+         }
+    } catch (error) {
+      console.error("failed to signup",error)
+      toast.error(error?.response?.data.message || "Internal server error")
+    }finally{
+      setLoading(false)
+    }
+   }
   return (
         <section className="flex min-h-screen w-full">
       {/* Left Panel */}
@@ -58,52 +87,58 @@ const page = () => {
           </div>
 
           {/* Form */}
-          <form className="space-y-6">
-            {/* Business Name */}
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            {/* full Name */}
             <div>
               <label className="mb-2 block text-sm font-medium text-[#0f172a]">
-                Business Name
+                Full Name
               </label>
-
               <input
                 type="text"
                 placeholder="e.g. Acme Corp"
                 className="h-12 w-full rounded-xl border border-[#e5e7eb] bg-white px-4 text-[#0f172a] placeholder:text-[#94a3b8] shadow-sm outline-none transition focus:border-[#2563eb] focus:ring-4 focus:ring-[#2563eb]/10"
+                {...register("fullname",{required:"Fullname is required",maxLength:{
+                  value:20,
+                  message:"Max 30 characters allowed"
+                }})}
               />
+              {errors.fullname && (
+                <p className='text-sm my-1 text-red-500'>{errors?.fullname?.message}</p>
+              )}
             </div>
-
-            {/* Mobile */}
-            <div>
+            {/* email */}
+             <div>
               <label className="mb-2 block text-sm font-medium text-[#0f172a]">
-                Mobile Number
+              Email
               </label>
-
-              <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#64748b]">
-                  +91
-                </span>
-
-                <input
-                  type="tel"
-                  placeholder="98765 43210"
-                  className="h-12 w-full rounded-xl border border-[#e5e7eb] bg-white pl-14 pr-4 text-[#0f172a] placeholder:text-[#94a3b8] shadow-sm outline-none transition focus:border-[#2563eb] focus:ring-4 focus:ring-[#2563eb]/10"
-                />
-              </div>
+              <input
+                type="text"
+                placeholder="Enter your mobile or email"
+                className="h-12 w-full rounded-xl border border-[#e5e7eb] bg-white px-4 text-[#0f172a] placeholder:text-[#94a3b8] outline-none transition focus:border-[#2563eb] focus:ring-4 focus:ring-[#2563eb]/10"
+                {...register("email",{required:"Email is Required",pattern:{
+                value:"/^\S+@\S+$/i,",
+                message:"Invalid email address"
+                 }})}
+              />
+              {errors.email && (
+                <p className='text-sm my-1 text-red-500'>{errors?.email?.message}</p>
+              )}
             </div>
-
             {/* Password */}
             <div>
               <label className="mb-2 block text-sm font-medium text-[#0f172a]">
                 Password
               </label>
-
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
                   className="h-12 w-full rounded-xl border border-[#e5e7eb] bg-white px-4 pr-12 text-[#0f172a] placeholder:text-[#94a3b8] shadow-sm outline-none transition focus:border-[#2563eb] focus:ring-4 focus:ring-[#2563eb]/10"
+                  {...register("password",{required:"Password is Required",minLength:{
+                    value:6,
+                    message:"Minimum 6 characters required"
+                  }})}
                 />
-
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
@@ -116,14 +151,29 @@ const page = () => {
                   )}
                 </button>
               </div>
+                {errors.password && (
+                <p className='text-sm my-1 text-red-500'>{errors?.password?.message}</p>
+              )}
             </div>
-
             {/* Button */}
             <button
               type="submit"
-              className="flex h-12 w-full items-center justify-center rounded-xl bg-[#2563eb] font-semibold text-white shadow-sm transition hover:bg-[#1d4ed8] active:scale-[0.99]"
+              disabled={loading}
+              className="flex h-12 w-full items-center justify-center rounded-xl bg-[#2563eb] font-semibold text-white shadow-sm transition cursor-pointer hover:bg-[#1d4ed8] active:scale-[0.99]"
             >
-              Create Account
+            {loading ?
+              <ThreeDots
+                visible={true}
+                height="25"
+                width="25"
+                color="#ffffff"
+                radius="9"
+                ariaLabel="three-dots-loading"
+                wrapperStyle={{}}
+                wrapperClass=""
+              />
+              : "Create Account"
+              }
             </button>
           </form>
           {/* Terms */}
@@ -188,7 +238,7 @@ const page = () => {
             <p className="text-[#64748b]">
               Already have an account?{" "}
               <Link
-                href="/login"
+                href="/auth/login"
                 className="font-semibold text-[#2563eb] hover:underline"
               >
                 Log In
