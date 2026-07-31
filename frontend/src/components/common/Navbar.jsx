@@ -30,7 +30,7 @@ const Navbar = () => {
                     {/* buttons */}
                     <div className="hidden md:flex items-center gap-6">
                         <Link href="/auth/login" className="transition-transform md:inline-flex text-[14px] font-medium text-[#0f172a] hover:text-[#2563eb]">Log In</Link>
-                        <Link href="" className="inline-flex items-center justify-center bg-[#2563eb] text-white text-[0.9rem] font-medium px-4 py-2 rounded-lg hover:bg-[#2563eb/90]  shadow-sm active:scale-95 transition-transform">
+                        <Link href="/auth/signup" className="inline-flex items-center justify-center bg-[#2563eb] text-white text-[0.9rem] font-medium px-4 py-2 rounded-lg hover:bg-[#2563eb/90]  shadow-sm active:scale-95 transition-transform">
                             Get Started Free
                         </Link>
                     </div>
