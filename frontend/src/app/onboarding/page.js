@@ -8,12 +8,55 @@ import Link from "next/link";
 import React, { useState } from "react";
 import BusinessDetails from "@/components/onboarding/BusinessDetails";
 import BusinessContact from "@/components/onboarding/BusinessContact";
+import { FormProvider, useForm } from "react-hook-form";
+import { useAddBusinessDetailsMutation } from "@/redux/api/onBoardingApi";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
+import { SetUser } from "@/redux/AuthSlice";
+
+ const STEPS = [
+  {
+    title: "Welcome to Hisaab",
+    subtitle: "Bas 2 minute me apni dukaan ka digital hisaab shuru karein.",
+  },
+  {
+    title: "Business Details",
+    subtitle: "Apni dukaan ki basic jankari add karein.",
+  },
+  {
+    title: "Contact Details",
+    subtitle: "Address aur mobile number add karein.",
+  },
+  ];
 
 const page = () => {
+  const methods = useForm({
+     defaultValues:{
+       businessName:"",
+       businessType:"",
+       businessAddress:"",
+       contactno:"",
+     }
+  })
+  const {handleSubmit,trigger,reset} = methods
   const [step, SetStep] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [AddBusinessDetails,{isLoading}] = useAddBusinessDetailsMutation()
+  const router = useRouter()
+  const dispatch = useDispatch()
 
-  const next = () => {
+ 
+  const currentStep = STEPS[step]
+  const stepFields = {
+     1: ["businessName", "businessType"],
+     2: ["businessAddress", "contactno"],
+  }
+  const next = async() => {
+    let fields = stepFields[step]
+    if (fields) {
+    const isValid = await trigger(fields);
+    if (!isValid) return;
+    }
     if (step < 2) {
       SetStep((prev) => prev + 1);
     }
@@ -23,7 +66,30 @@ const page = () => {
       SetStep((prev) => prev - 1);
     }
   };
-
+  const onSubmit = async(data)=>{
+      const formdata = {
+        businessName:data.businessName,
+        businessType:data.businessType,
+        businessAddress:data.businessAddress,
+        contactno:data.contactno
+      }
+      try {
+        const response = await AddBusinessDetails(formdata).unwrap()
+        toast.success(response?.message)
+        const updateduser = response?.data?.user
+        dispatch(SetUser(updateduser))
+        reset()
+        router.replace("/dashboard")
+      } catch (error) {
+        console.error("failed to onboarding user",error)
+        const errors = error?.data?.data;
+        if (Array.isArray(errors) && errors.length > 0) {
+           errors.forEach((err) => toast.error(err.msg));
+          return;
+        }
+        toast.error(error?.data?.message || "Internal server error")
+      }
+  }
   return (
     <div className="flex min-h-screen flex-col md:flex-row">
       {/* Left Side */}
@@ -97,31 +163,15 @@ const page = () => {
               </>
             )}
             {/* Heading */}
-            {step === 0 && (
-              <>
-                <h1 className="mb-3 text-2xl md:text-4xl font-bold tracking-tight text-[#0f172a]">
-                  Welcome to Hisaab
+             <h1 className="mb-3 text-2xl md:text-4xl font-bold tracking-tight text-[#0f172a]">
+                  {currentStep.title}
                 </h1>
-
                 <p className="mb-10 text-[1rem] text-[#64748b]">
-                  Bas 2 minute me apni dukaan ka digital hisaab shuru karein.
+                 {currentStep.subtitle}
                 </p>
-              </>
-            )}
-            {step === 1 && (
-              <>
-                <h1 className="mb-3 text-2xl md:text-4xl font-bold tracking-tight text-[#0f172a]">Business Details</h1>
-                <p className="mb-10 text-[1rem] text-[#64748b]">Apni dukaan ki basic jankari add karein.</p>
-              </>
-            )}
-            {step === 2 && (
-              <>
-                <h1 className="mb-3 text-2xl md:text-4xl font-bold tracking-tight text-[#0f172a]">Contact Details</h1>
-                <p className="mb-10 text-[1rem] text-[#64748b]">Address aur mobile number add karein.</p>
-              </>
-            )}
             {/* Features */}
-            <form className="space-y-6">
+            <FormProvider  {...methods}>
+               <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               {step === 0 && <WelcomeStep />}
               {step === 1 && <BusinessDetails />}
               {step === 2 && <BusinessContact />}
@@ -130,9 +180,11 @@ const page = () => {
                 step={step}
                 back={back}
                 next={next}
-                loading={loading}
+                loading={isLoading}
               />
             </form>
+            </FormProvider>
+           
           </div>
           {/* Footer */}
           <p className="mx-auto mt-6 max-w-[460px] text-center text-sm text-[#64748b]">

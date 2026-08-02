@@ -3,6 +3,7 @@ import User from "../models/userModel.js";
 import Business from "../models/businessModel.js";
 import { Response } from "../utils/responseHandler.js";
 import { deleteFromImageKit, uploadToImageKit } from "../utils/helpers.js";
+import { UserMapper } from "../mappers/userMapper.js";
 
 // onboarding user
 export const OnBoardingUser = async (req, res) => {
@@ -40,6 +41,7 @@ export const OnBoardingUser = async (req, res) => {
     user.isOnboarded = true;
     await user.save();
     return Response(res, 201, "Onboarding successfully", {
+      user:UserMapper(user),
       businessDetails: business,
     });
   } catch (error) {

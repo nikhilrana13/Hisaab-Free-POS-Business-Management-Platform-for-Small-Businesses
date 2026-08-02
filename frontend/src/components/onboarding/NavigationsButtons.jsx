@@ -1,7 +1,7 @@
 import { ArrowRight } from 'lucide-react';
 import React from 'react';
 
-const NavigationButtons = ({ back, next, disabled, submit, step, loading }) => {
+const NavigationButtons = ({ back, next,step, loading }) => {
   return (
     <div className="mt-10 flex border-t gap-5 border-[#e5e7eb] pt-6 justify-between">
       {step === 0 && (
@@ -31,7 +31,8 @@ const NavigationButtons = ({ back, next, disabled, submit, step, loading }) => {
           </button>
         <button
           type="submit"
-          className="flex w-full items-center cursor-pointer justify-center gap-2 rounded-xl bg-[#2563eb] py-3 font-semibold text-white transition hover:bg-[#1d4ed8]"
+          disabled={loading}
+          className="flex w-full items-center cursor-pointer justify-center gap-2 rounded-xl bg-[#2563eb] py-3 font-semibold text-white transition disabled:opacity-50 disabled:cursor-not-allowed  hover:bg-[#1d4ed8]"
         >
           {loading ? "Submitting..." : "Finish Setup"}
         </button>
