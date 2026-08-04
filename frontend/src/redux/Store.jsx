@@ -5,6 +5,7 @@ import persistStore from "redux-persist/es/persistStore";
 import sessionStorage from "redux-persist/es/storage/session";
 import { AuthSlice } from "./AuthSlice";
 import { OnBoardingApi } from "./api/onBoardingApi";
+import { DashboardApi } from "./api/DashboardApi";
 
 
 
@@ -16,10 +17,11 @@ const userpersistconfig={
 const persistconfiguser = persistReducer(userpersistconfig,AuthSlice.reducer)
 const rootReducer = combineReducers({
     Auth:persistconfiguser,
-    [OnBoardingApi.reducerPath]:OnBoardingApi.reducer
+    [OnBoardingApi.reducerPath]:OnBoardingApi.reducer,
+    [DashboardApi.reducerPath]:DashboardApi.reducer
 })
 export const Store = configureStore({
     reducer:rootReducer,
-    middleware:(getDefaultMiddleware)=>getDefaultMiddleware({serializableCheck:false}).concat(OnBoardingApi.middleware)
+    middleware:(getDefaultMiddleware)=>getDefaultMiddleware({serializableCheck:false}).concat(OnBoardingApi.middleware).concat(DashboardApi.middleware)
 })
 export const Persistor = persistStore(Store)

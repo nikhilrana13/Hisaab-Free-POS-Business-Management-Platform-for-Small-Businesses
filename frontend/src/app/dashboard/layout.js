@@ -13,7 +13,7 @@ const layout = ({ children }) => {
           <Sidebar />
         </div>
         {/* right side */}
-        <div className="w-full  lg:w-[80%] h-screen   overflow-y-auto">
+        <div className="w-full pb-28 md:pb-0  lg:w-[80%] h-screen  overflow-y-auto">
           {children}
         </div>
       </div>
