@@ -1,5 +1,6 @@
 import { SetUser } from '@/redux/AuthSlice';
 import { api } from '@/services/api';
+import { resetAllApiCaches } from '@/utils/resetApiCache';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
@@ -15,6 +16,7 @@ const useLogout = () => {
                 toast.success(response?.message)
                 localStorage.removeItem("token")
                 dispatch(SetUser(null))
+                dispatch(resetAllApiCaches())
                 router.replace("/")
             }
         } catch (error) {

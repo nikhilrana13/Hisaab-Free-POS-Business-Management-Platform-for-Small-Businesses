@@ -23,8 +23,8 @@ export const baseQueryWithAuth = async(args,api,extraOptions)=>{
     const isAuthApi = url?.includes("/api/login");
     if (status === 401 && !isAuthApi) {
       localStorage.setItem("lastPath", window.location.pathname); // save current page pathname
-    //   const { resetAllApiCaches } = await import("@/utils/resetApiCache.js");
-    //   api.dispatch(resetAllApiCaches());
+      const { resetAllApiCaches } = await import("@/utils/resetApiCache.js");
+      api.dispatch(resetAllApiCaches());
       localStorage.removeItem("token");
       api.dispatch(logout()) 
       window.dispatchEvent(new Event("unauthorized"));
