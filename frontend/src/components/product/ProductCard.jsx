@@ -8,7 +8,7 @@ const ProductCard = ({product}) => {
             {/* Image */}
             <div className="relative h-44 overflow-hidden">
                 <Image
-                    src={product?.image?.url || ""}
+                    src={product?.image?.url|| "/noimg.jpg" }
                     alt={product?.productName}
                     fill
                     className="object-cover"

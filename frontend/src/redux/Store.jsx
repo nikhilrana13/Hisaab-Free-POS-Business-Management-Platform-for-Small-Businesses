@@ -6,6 +6,7 @@ import sessionStorage from "redux-persist/es/storage/session";
 import { AuthSlice } from "./AuthSlice";
 import { OnBoardingApi } from "./api/onBoardingApi";
 import { DashboardApi } from "./api/DashboardApi";
+import { ProductApi } from "./api/ProductApi";
 
 
 
@@ -18,10 +19,11 @@ const persistconfiguser = persistReducer(userpersistconfig,AuthSlice.reducer)
 const rootReducer = combineReducers({
     Auth:persistconfiguser,
     [OnBoardingApi.reducerPath]:OnBoardingApi.reducer,
-    [DashboardApi.reducerPath]:DashboardApi.reducer
+    [DashboardApi.reducerPath]:DashboardApi.reducer,
+    [ProductApi.reducerPath]:ProductApi.reducer
 })
 export const Store = configureStore({
     reducer:rootReducer,
-    middleware:(getDefaultMiddleware)=>getDefaultMiddleware({serializableCheck:false}).concat(OnBoardingApi.middleware).concat(DashboardApi.middleware)
+    middleware:(getDefaultMiddleware)=>getDefaultMiddleware({serializableCheck:false}).concat(OnBoardingApi.middleware).concat(DashboardApi.middleware).concat(ProductApi.middleware)
 })
 export const Persistor = persistStore(Store)
