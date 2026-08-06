@@ -9,11 +9,11 @@ const layout = ({ children }) => {
     <div className="flex flex-col bg-[#FAF8FF]">
       <div className="flex flex-col md:flex-row min-h-screen w-full">
         {/* left side */}
-        <div className="hidden lg:block w-full lg:w-[20%]">
+        <div className="hidden xl:block w-full lg:w-[20%]">
           <Sidebar />
         </div>
         {/* right side */}
-        <div className="w-full pb-28 md:pb-0  lg:w-[80%] h-screen  overflow-y-auto">
+        <div className="w-full pb-40 md:pb-0  xl:w-[80%] h-screen  overflow-y-auto">
           {children}
         </div>
       </div>

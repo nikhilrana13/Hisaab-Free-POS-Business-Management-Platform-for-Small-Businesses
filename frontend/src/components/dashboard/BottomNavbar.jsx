@@ -6,7 +6,7 @@ import Link from 'next/link';
 const BottomNavbar = () => {
     const pathname = usePathname()
   return (
-     <nav className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))]  left-1/2 z-50 w-[calc(100%-24px)] max-w-md -translate-x-1/2 rounded-3xl border border-[#E5E7EB] bg-white/90 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.12)] lg:hidden">
+     <nav className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))]  left-1/2 z-50 w-[calc(100%-24px)] max-w-md -translate-x-1/2 rounded-3xl border border-[#E5E7EB] bg-white/90 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.12)] xl:hidden">
       <div className="grid grid-cols-5 items-end px-1 sm:px-2 py-2">
         {BottomNavbarLinks.map((item) => {
           const Icon = item.icon;
