@@ -1,5 +1,4 @@
 import { PackagePlus } from 'lucide-react';
-import Link from 'next/link';
 import React from 'react';
 
 const EmptyProductState = () => {
@@ -15,9 +14,6 @@ const EmptyProductState = () => {
               Billing shuru karne ke liye pehle apni dukaan ke products add
               karein.
             </p>
-            <Link href={"/dashboard/products/create"} className="mt-8 rounded-xl bg-[#2563eb] px-6 py-3 font-semibold text-white transition hover:bg-[#1d4ed8]">
-              + Product Add Karein
-            </Link>
           </div>
   );
 }

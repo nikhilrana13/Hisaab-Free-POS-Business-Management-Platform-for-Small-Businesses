@@ -48,7 +48,6 @@ const page = () => {
     pagination?.totalProducts,
   );
   return (
-    <>
       <div className="flex flex-col p-5 space-y-6">
         {/* header */}
         <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
@@ -178,7 +177,6 @@ const page = () => {
           </div>
         </div>
       </div>
-    </>
   );
 };
 
