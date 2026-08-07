@@ -46,6 +46,7 @@ const MobileBillDrawer = ({open,onClose,selectedProducts,setSelectedProducts}) =
           <div className="overflow-y-auto px-5 py-5 max-h-[calc(85vh-90px)]">
             <BillSummary
               selectedProducts={selectedProducts} setSelectedProducts={setSelectedProducts}
+              onClose={onClose}
             />
           </div>
         </div>

@@ -7,6 +7,7 @@ import { AuthSlice } from "./AuthSlice";
 import { OnBoardingApi } from "./api/onBoardingApi";
 import { DashboardApi } from "./api/DashboardApi";
 import { ProductApi } from "./api/ProductApi";
+import { OrderApi } from "./api/OrderApi";
 
 
 
@@ -20,10 +21,11 @@ const rootReducer = combineReducers({
     Auth:persistconfiguser,
     [OnBoardingApi.reducerPath]:OnBoardingApi.reducer,
     [DashboardApi.reducerPath]:DashboardApi.reducer,
-    [ProductApi.reducerPath]:ProductApi.reducer
+    [ProductApi.reducerPath]:ProductApi.reducer,
+    [OrderApi.reducerPath]:OrderApi.reducer
 })
 export const Store = configureStore({
     reducer:rootReducer,
-    middleware:(getDefaultMiddleware)=>getDefaultMiddleware({serializableCheck:false}).concat(OnBoardingApi.middleware).concat(DashboardApi.middleware).concat(ProductApi.middleware)
+    middleware:(getDefaultMiddleware)=>getDefaultMiddleware({serializableCheck:false}).concat(OnBoardingApi.middleware).concat(DashboardApi.middleware).concat(ProductApi.middleware).concat(OrderApi.middleware)
 })
 export const Persistor = persistStore(Store)

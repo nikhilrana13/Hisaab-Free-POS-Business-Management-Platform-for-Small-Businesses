@@ -1,10 +1,17 @@
-import React from 'react';
+"use client"
+import React, { useState } from 'react';
 import { ChevronDown, Minus, Plus, ShoppingBag, Trash2, } from "lucide-react";
 import Image from "next/image";
+import { useCreateOrderMutation } from '@/redux/api/OrderApi';
+import PaymentMethod from './PaymentMethod';
+import toast from 'react-hot-toast';
+import { ThreeDots } from 'react-loader-spinner';
 
-const BillSummary = ({ selectedProducts, setSelectedProducts }) => {
+const BillSummary = ({ selectedProducts, setSelectedProducts,onClose}) => {
     const subtotal = selectedProducts.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    
+    const [CreateOrder, { isLoading }] = useCreateOrderMutation()
+    const [paymentMethod, setPaymentMethod] = useState("cash")
+
     const increaseQuantity = (productId) => {
         setSelectedProducts((prev) =>
             prev.map((item) =>
@@ -53,6 +60,29 @@ const BillSummary = ({ selectedProducts, setSelectedProducts }) => {
             })
         );
     };
+
+    
+    const handleCreateOrder = async () => {
+        const payload = {
+            products: selectedProducts.map((item) => ({
+                product: item.productId,
+                selectedPriceOptionId: item.selectedPriceOptionId,
+                quantity: item.quantity
+            })),
+            paymentMethod: paymentMethod
+        }
+        try {
+            const response = await CreateOrder(payload).unwrap()
+            toast.success(response?.message)
+            onClose?.()
+            setSelectedProducts([])
+        } catch (error) {
+            console.error("failed to create order", error)
+            toast.error(error?.data?.message || "Internal server error")
+        }
+    }
+
+
     return (
         <div className="flex h-screen flex-col">
             {/* Header */}
@@ -160,7 +190,8 @@ const BillSummary = ({ selectedProducts, setSelectedProducts }) => {
                     </div>
                 ))}
             </div>
-
+            {/* payment method */}
+            <PaymentMethod paymentMethod={paymentMethod} setPaymentMethod={setPaymentMethod} />
             {/* Footer */}
             <div className="mt-6 border-t border-[#e5e7eb] pt-5">
                 <div className="mb-2 flex items-center justify-between text-[#64748b]">
@@ -176,8 +207,22 @@ const BillSummary = ({ selectedProducts, setSelectedProducts }) => {
                         ₹{subtotal}
                     </span>
                 </div>
-                <button className="flex h-12 w-full items-center justify-center rounded-2xl bg-[#2563eb] font-semibold text-white transition hover:bg-[#1d4ed8]">
-                    Save Sale
+                <button disabled={isLoading} onClick={handleCreateOrder} className="flex h-12 w-full items-center justify-center cursor-pointer disabled:cursor-not-allowed rounded-2xl bg-[#2563eb] font-semibold text-white transition hover:bg-[#1d4ed8]">
+                    {isLoading ? (
+                        <ThreeDots
+                            visible={true}
+                            height="25"
+                            width="25"
+                            color="#ffffff"
+                            radius="9"
+                            ariaLabel="three-dots-loading"
+                            wrapperStyle={{}}
+                            wrapperClass=""
+                        />
+                    ) : (
+                        "Save Sale"
+                    )
+                    }
                 </button>
             </div>
         </div>

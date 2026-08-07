@@ -10,7 +10,9 @@ import React from "react";
 import { MdOutlineDonutSmall } from "react-icons/md";
 
 const page = () => {
-  const { data, isLoading} = useGetDashboardStatsQuery();
+  const { data, isLoading} = useGetDashboardStatsQuery(undefined,{
+     refetchOnMountOrArgChange: true,
+  });
   const statsdata = data?.data?.stats;
 
   const stats = [
