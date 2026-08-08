@@ -1,9 +1,9 @@
-import { Trash2 } from 'lucide-react';
+
 import Image from 'next/image';
 import React from 'react';
-import { MdEdit } from 'react-icons/md';
+import { MdDelete, MdEdit } from 'react-icons/md';
 
-const ProductMobileCard = ({product}) => {
+const ProductMobileCard = ({ product, onEdit, onDelete, isDeleting, deleteProductId }) => {
   return (
     <div className="overflow-hidden rounded-3xl border border-[#e5e7eb] bg-white shadow-sm transition hover:shadow-md">
       <div className="flex gap-4 p-4">
@@ -25,12 +25,17 @@ const ProductMobileCard = ({product}) => {
             </h3>
 
             <div className="flex items-center gap-2">
-              <button className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#EEF2FF] text-[#2563eb] transition hover:bg-[#dbeafe]">
+              <button onClick={() => onEdit(product)} className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#EEF2FF] text-[#2563eb] transition hover:bg-[#dbeafe]">
                 <MdEdit size={18} />
               </button>
 
-              <button className="flex h-9 w-9 items-center justify-center rounded-xl bg-red-50 text-red-500 transition hover:bg-red-100">
-                <Trash2 size={18} />
+              <button disabled={deleteProductId === product?._id || isDeleting} onClick={() => onDelete(product?._id)} className="flex h-9 w-9 items-center justify-center rounded-xl bg-red-50 text-red-500 transition hover:bg-red-100">
+                {deleteProductId === product?._id ? (
+                  <div className="w-4 h-4 border-2 border-red-400 border-t-red-600 rounded-full animate-spin"></div>
+                ) : (
+                  <MdDelete />
+                )
+                }
               </button>
             </div>
           </div>

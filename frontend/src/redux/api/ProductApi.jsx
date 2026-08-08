@@ -18,9 +18,35 @@ export const ProductApi = createApi({
                         limit
                     }
                  }),
+                ProvidesTags:["Product"]
+            }),
+            // add product 
+            AddProduct:builder.mutation({
+                query:(formdata)=>({
+                    url:"/api/products/add-product",
+                    method:"POST",
+                    body:formdata
+                }),
                 invalidatesTags:["Product"]
-            })  
+            }),
+            // update product
+             UpdateProduct:builder.mutation({
+                query:({formdata,id})=>({
+                    url:`/api/products/update/${id}`,
+                    method:"PUT",
+                    body:formdata
+                }),
+                invalidatesTags:["Product"]
+            }),
+            // delete product 
+            DeleteProduct:builder.mutation({
+                query:(id)=>({
+                    url:`/api/products/delete/${id}`,
+                    method:"DELETE"
+                }),
+                invalidatesTags:["Product"]
+            })
     })
 })
 
-export const {useGetProductsQuery} = ProductApi
+export const {useGetProductsQuery,useAddProductMutation,useUpdateProductMutation,useDeleteProductMutation} = ProductApi

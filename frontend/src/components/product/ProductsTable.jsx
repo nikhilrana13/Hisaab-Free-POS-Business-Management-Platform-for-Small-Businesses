@@ -1,15 +1,32 @@
-
-import React from 'react';
-import { MdEdit } from 'react-icons/md';
+"use client"
+import React, { useState } from 'react';
+import { MdDelete, MdEdit } from 'react-icons/md';
 import ProductTableShimmer from './ProductTableShimmer';
 import EmptyProductState from './EmptyProductState';
 import ProductMobileCard from './ProductMobileCard';
 import ProductMobileCardShimmer from './ProductMobileCardShimmer';
 import Image from 'next/image';
+import { useDeleteProductMutation } from '@/redux/api/ProductApi';
+import toast from 'react-hot-toast';
 
 
-const ProductsTable = ({ products, isLoading, isError }) => {
-
+const ProductsTable = ({ products, isLoading, isError, onEdit,onDeleteSuccess}) => {
+  const [deleteProductId, setDeleteProductId] = useState(null)
+  const [DeleteProduct, { isLoading: isDeleting }] = useDeleteProductMutation()
+  
+  const handleDelete = async(id)=>{
+    try{
+       setDeleteProductId(id)
+       const response = await DeleteProduct(id).unwrap()
+       toast.success(response?.message)
+       onDeleteSuccess?.()
+    }catch(error){
+      console.error("Failed to delete product",error)
+      toast.error(error?.data?.message || "Internal server error")
+    }finally{
+      setDeleteProductId(null)
+    }
+  }
   return (
     <div className='w-full'>
       {/* Desktop Table */}
@@ -37,13 +54,13 @@ const ProductsTable = ({ products, isLoading, isError }) => {
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
                         <div className='overflow-hidden w-10 h-10 rounded-lg'>
-                         <Image
-                          src={product?.image?.url || "/noimg.jpg"}
-                          alt={product?.productName}
-                          width={40}
-                          height={40}
-                          className="object-cover"
-                        />
+                          <Image
+                            src={product?.image?.url || "/noimg.jpg"}
+                            alt={product?.productName}
+                            width={40}
+                            height={40}
+                            className="object-cover"
+                          />
                         </div>
                         <div>
                           <p className="font-semibold text-sm">{product?.productName || "NA"}</p>
@@ -72,18 +89,18 @@ const ProductsTable = ({ products, isLoading, isError }) => {
                     {/* Actions */}
                     <td className="px-4 py-3 text-right">
                       <div className="flex justify-end gap-2">
-                        <button className="p-1 cursor-pointer hover:bg-gray-100 rounded">
+                        <button onClick={() => onEdit(product)} className="p-1 cursor-pointer hover:bg-gray-100 rounded">
                           <MdEdit />
                         </button>
-                        {/* <button disabled={deleteprojectId === product?._id || isDeleting} onClick={() => handleDelete(product?._id)} className="p-1 hover:bg-red-100 text-red-500 rounded flex items-center justify-center">
-                                                {deleteprojectId === product?._id ? (
-                                                    <div className="w-4 h-4 border-2 border-red-400 border-t-red-600 rounded-full animate-spin"></div>
-                                                ) : (
-                                                    <MdDelete />
-                                                )
-                                                }
+                        <button disabled={deleteProductId === product?._id || isDeleting} onClick={() => handleDelete(product?._id)} className="p-1 hover:bg-red-100 cursor-pointer text-red-500 rounded flex items-center justify-center">
+                          {deleteProductId === product?._id ? (
+                            <div className="w-4 h-4 border-2 border-red-400 border-t-red-600 rounded-full animate-spin"></div>
+                          ) : (
+                            <MdDelete />
+                          )
+                          }
 
-                                            </button> */}
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -120,7 +137,7 @@ const ProductsTable = ({ products, isLoading, isError }) => {
             </div>
           ) : products?.length > 0 ? (
             products?.map((product) => (
-              <ProductMobileCard key={product?._id} product={product} />
+              <ProductMobileCard key={product?._id} product={product} onEdit={onEdit} onDelete={handleDelete} isDeleting={isDeleting} deleteProductId={deleteProductId} />
             ))
           ) : isError ? (
             <p className="text-center py-4 text-red-500">

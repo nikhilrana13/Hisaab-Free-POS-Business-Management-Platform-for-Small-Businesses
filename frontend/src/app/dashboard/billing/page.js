@@ -19,6 +19,8 @@ const page = () => {
     page,
     productname: debounceValue,
     limit: 4,
+  },{
+     refetchOnMountOrArgChange: true,
   });
   const products = data?.data?.products || [];
   const pagination = data?.data?.pagination || {};

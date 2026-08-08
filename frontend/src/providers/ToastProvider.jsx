@@ -14,7 +14,7 @@ const ToastProvider = () => {
           fontSize: "14px",
         },
       }}
-      style={{ zIndex: 200000 }}
+      style={{ zIndex: 999999 }}
     />
   )
 }

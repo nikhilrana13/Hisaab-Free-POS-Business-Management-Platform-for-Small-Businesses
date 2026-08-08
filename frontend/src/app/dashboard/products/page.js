@@ -1,4 +1,5 @@
 "use client";
+import AddAndEditProductForm from "@/components/product/AddAndEditProductForm";
 import ProductsTable from "@/components/product/ProductsTable";
 import useDebounce from "@/hooks/useDebounce";
 import { useGetProductsQuery } from "@/redux/api/ProductApi";
@@ -9,7 +10,7 @@ const page = () => {
   const [page, setPage] = useState(1);
   const [searchInput, setSearchInput] = useState("");
   const { debounceValue } = useDebounce(searchInput, 500);
-  const { data, isLoading, isError } = useGetProductsQuery({
+  const { data, isLoading, isError,refetch } = useGetProductsQuery({
     page,
     productname: debounceValue,
     limit: 5,
@@ -17,7 +18,9 @@ const page = () => {
   const products = data?.data?.products || [];
   const pagination = data?.data?.pagination || {};
   const productRef = useRef(null);
-
+  const [isEdit,setIsEdit] = useState(false)
+  const[isProductFormOpen,setIsProductFormOpen] = useState(false)
+  const [selectedProduct,setSelectedProduct] = useState(null)
   // redirect to page 1 when search input changes
   useEffect(() => {
     setPage(1);
@@ -36,10 +39,25 @@ const page = () => {
   const end = Math.min(
     pagination?.currentPage * pagination?.limit,
     pagination?.totalProducts,
-  );
+  ); 
+
+  const handleEdit = (product)=>{
+    setIsEdit(true)
+    setSelectedProduct(product)
+    setIsProductFormOpen(true)
+  }
+  const handleDeleteSuccess = () => {
+    if (products.length === 1 && page > 1) {
+        setPage((prev) => prev - 1);
+    } else {
+        refetch();
+    }
+};
+
 
   return (
-    <div className="flex flex-col p-5 space-y-6">
+    <>
+      <div className="flex flex-col p-5 space-y-6">
       {/* header */}
       <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
         <div className="max-w-2xl">
@@ -55,7 +73,7 @@ const page = () => {
           </p>
         </div>
         {/* Create product dialog*/}
-        <button className="flex h-12 cursor-pointer items-center justify-center gap-2 rounded-2xl bg-[#2563eb] px-6 font-semibold text-white transition hover:bg-[#1d4ed8]">
+        <button onClick={()=>{setIsProductFormOpen(true),setIsEdit(false),setSelectedProduct(null)}} className="flex h-12 cursor-pointer items-center justify-center gap-2 rounded-2xl bg-[#2563eb] px-6 font-semibold text-white transition hover:bg-[#1d4ed8]">
           <PackagePlus size={20} />
           Add Product
         </button>
@@ -90,6 +108,8 @@ const page = () => {
             products={products}
             isLoading={isLoading}
             isError={isError}
+            onEdit={handleEdit}
+            onDeleteSuccess={handleDeleteSuccess}
           />
           {/* pagination */}
           {!isLoading && pagination?.totalPages > 1 && (
@@ -135,6 +155,12 @@ const page = () => {
         </div>
       </div>
     </div>
+    {/* show product form model */}
+     {isProductFormOpen && (
+      <AddAndEditProductForm onClose={()=>{setIsProductFormOpen(false),setIsEdit(false),setSelectedProduct(null),refetch()}} isEdit={isEdit} product={selectedProduct} />
+     )}
+    </>
+  
   );
 };
 
