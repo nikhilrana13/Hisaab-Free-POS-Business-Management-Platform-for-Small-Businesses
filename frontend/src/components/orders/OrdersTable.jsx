@@ -11,8 +11,8 @@ const OrdersTable = ({ orders, isLoading, isError }) => {
             {/* Desktop */}
             <div className="hidden overflow-hidden rounded-3xl border border-[#e5e7eb] bg-white shadow-sm md:block">
                 {/* Table Header */}
-                <div className="border-b border-[#e5e7eb] bg-[#f8fafc] px-6 py-4">
-                    <div className="grid grid-cols-[1.5fr_1fr_0.8fr_0.8fr_1fr_40px] items-center gap-4 text-xs font-bold uppercase tracking-wider text-[#94a3b8]">
+                <div className="px-6 py-4">
+                    <div className="grid grid-cols-[1.5fr_1fr_0.8fr_0.8fr_1fr_40px] items-center gap-4 text-xs font-bold uppercase tracking-wider text-[#2563eb]">
                         <span>Order</span>
                         <span>Items</span>
                         <span>Payment</span>
