@@ -16,8 +16,20 @@ export const OrderApi = createApi({
                     body:payload
                 }),
                 invalidatesTags:["Order"]
+            }),
+            GetAllOrders:builder.query({
+                query:({page,limit,range,paymentMethod})=>({
+                    url:"/api/orders/all",
+                    params:{
+                        page,
+                        limit,
+                        range,
+                        paymentMethod
+                    }
+                }),
+                providesTags:["Order"]
             })
     })
 })
 
-export const {useCreateOrderMutation} = OrderApi
+export const {useCreateOrderMutation,useGetAllOrdersQuery} = OrderApi

@@ -104,8 +104,8 @@ export const GetAllOrders = async (req, res) => {
     if (!user.isOnboarded) {
       return Response(res, 400, "Please complete Onboarding");
     }
-    const allowedPaymentmethod = ["cash", "upi"];
-    const allowedRanges = ["today", "week", "month"];
+    const allowedPaymentmethod = ["all","cash","upi"];
+    const allowedRanges = ["all","today", "week", "month"];
     if (range && !allowedRanges.includes(range)) {
       return Response(res, 400, "Invalid range");
     }
@@ -114,7 +114,7 @@ export const GetAllOrders = async (req, res) => {
     }
     // filter
     let filter = { ownerId: userId };
-    if (paymentMethod) {
+    if (paymentMethod && paymentMethod !== "all") {
       filter.paymentMethod = paymentMethod;
     }
     // find today and this week order
@@ -124,7 +124,8 @@ export const GetAllOrders = async (req, res) => {
     const endOfweek = moment().tz("Asia/Kolkata").endOf("isoWeek").toDate();
     const startOfmonth = moment().tz("Asia/Kolkata").startOf("month").toDate();
     const endOfmonth = moment().tz("Asia/Kolkata").endOf("month").toDate();
-
+    
+    
     if (range === "today") {
       filter.createdAt = { $gte: start, $lte: end };
     }
