@@ -1,4 +1,4 @@
-import { FormatDate, GetPaymentStyle } from '@/utils/Helpers';
+import { FormatDate, FormatTime, GetPaymentStyle } from '@/utils/Helpers';
 import { CalendarDays, ChevronRight, CreditCard, ShoppingBag } from 'lucide-react';
 import React from 'react';
 import OrderTableShimmer from './OrderTableShimmer';
@@ -17,7 +17,7 @@ const OrdersTable = ({ orders, isLoading, isError }) => {
                         <span>Items</span>
                         <span>Payment</span>
                         <span>Total</span>
-                        <span>Date</span>
+                        <span>Date And Time</span>
                     </div>
                 </div>
                 {isLoading ? (
@@ -79,13 +79,16 @@ const OrdersTable = ({ orders, isLoading, isError }) => {
                                     </p>
                                 </div>
 
-                                {/* Date */}
-                                <div className="flex items-center gap-2 text-sm text-[#64748b]">
-                                    <CalendarDays
+                                {/* Date and time */}
+                                <div className="flex flex-col">
+                                    <div className='flex items-center gap-2 text-sm  text-[#64748b]'>
+                                        <CalendarDays
                                         size={15}
                                         className="shrink-0 text-[#94a3b8]"
                                     />
                                     <span>{FormatDate(order?.createdAt)}</span>
+                                    </div>
+                                    <span className='text-sm mt-3 text-gray-600'>{FormatTime(order?.createdAt)}</span>
                                 </div>
                             </div>
                         ))}

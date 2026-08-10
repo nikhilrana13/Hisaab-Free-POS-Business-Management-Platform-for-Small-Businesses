@@ -5,9 +5,9 @@ import {
     CreditCard,
     ShoppingBag,
 } from "lucide-react";
-import { FormatDate } from "@/utils/Helpers";
+import { FormatDate, FormatTime } from "@/utils/Helpers";
 
-const OrderMobileCard = ({ order}) => {
+const OrderMobileCard = ({ order }) => {
 
 
     const paymentStyle = order?.paymentMethod === "upi" ? "bg-violet-50 text-violet-700 border-violet-100" : "bg-emerald-50 text-emerald-700 border-emerald-100";
@@ -97,13 +97,15 @@ const OrderMobileCard = ({ order}) => {
                 </div>
 
                 {/* Date */}
-                <div className="flex items-center gap-2 text-xs font-medium text-[#64748b]">
-                    <CalendarDays
-                        size={15}
-                        className="text-[#94a3b8]"
-                    />
-
-                    <span>{FormatDate(order?.createdAt)}</span>
+                <div className="flex flex-col ">
+                    <div className='flex items-center gap-2 text-sm  text-[#64748b]'>
+                        <CalendarDays
+                            size={15}
+                            className="shrink-0 text-[#94a3b8]"
+                        />
+                        <span>{FormatDate(order?.createdAt)}</span>
+                    </div>
+                    <span className='text-sm mt-3 text-gray-600'>{FormatTime(order?.createdAt)}</span>
                 </div>
             </div>
         </div>

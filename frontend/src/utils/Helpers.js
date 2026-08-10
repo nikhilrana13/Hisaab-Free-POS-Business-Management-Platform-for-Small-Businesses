@@ -49,6 +49,15 @@ export const FormatDate = (date) => {
         });
     };
 
+export const FormatTime = (date) => {
+    if (!date) return "N/A";
+    return new Date(date).toLocaleTimeString("en-IN", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+    });
+};
+
 export const GetPaymentStyle = (method) => {
         if (method === "upi") {
             return "bg-violet-50 text-violet-700 border-violet-100";
