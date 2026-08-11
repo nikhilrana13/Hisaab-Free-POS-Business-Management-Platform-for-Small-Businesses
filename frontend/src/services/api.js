@@ -30,7 +30,7 @@ api.interceptors.response.use(
       localStorage.removeItem("token");
       localStorage.setItem("lastPath", window.location.pathname); // save current page pathname
       Store.dispatch(logout())
-      window.dispatchEvent(new Event("unauthorized"))
+      window.location.href = "/auth/login";
     }
     return Promise.reject(error);
   }

@@ -26,8 +26,8 @@ export const baseQueryWithAuth = async(args,api,extraOptions)=>{
       const { resetAllApiCaches } = await import("@/utils/resetApiCache.js");
       api.dispatch(resetAllApiCaches());
       localStorage.removeItem("token");
-      api.dispatch(logout()) 
-      window.dispatchEvent(new Event("unauthorized"));
+      api.dispatch(logout())
+      window.location.href = "/auth/login";
     }
   }
   return result;
