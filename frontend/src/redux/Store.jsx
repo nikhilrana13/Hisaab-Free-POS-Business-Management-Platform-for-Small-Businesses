@@ -9,6 +9,7 @@ import { DashboardApi } from "./api/DashboardApi";
 import { ProductApi } from "./api/ProductApi";
 import { OrderApi } from "./api/OrderApi";
 import { AnalyticsApi } from "./api/AnalyticsApi";
+import { BusinessApi } from "./api/BusinessApi";
 
 
 
@@ -24,10 +25,11 @@ const rootReducer = combineReducers({
     [DashboardApi.reducerPath]:DashboardApi.reducer,
     [ProductApi.reducerPath]:ProductApi.reducer,
     [OrderApi.reducerPath]:OrderApi.reducer,
-    [AnalyticsApi.reducerPath]:AnalyticsApi.reducer
+    [AnalyticsApi.reducerPath]:AnalyticsApi.reducer,
+    [BusinessApi.reducerPath]:BusinessApi.reducer
 })
 export const Store = configureStore({
     reducer:rootReducer,
-    middleware:(getDefaultMiddleware)=>getDefaultMiddleware({serializableCheck:false}).concat(OnBoardingApi.middleware).concat(DashboardApi.middleware).concat(ProductApi.middleware).concat(OrderApi.middleware).concat(AnalyticsApi.middleware)
+    middleware:(getDefaultMiddleware)=>getDefaultMiddleware({serializableCheck:false}).concat(OnBoardingApi.middleware).concat(DashboardApi.middleware).concat(ProductApi.middleware).concat(OrderApi.middleware).concat(AnalyticsApi.middleware).concat(BusinessApi.middleware)
 })
 export const Persistor = persistStore(Store)

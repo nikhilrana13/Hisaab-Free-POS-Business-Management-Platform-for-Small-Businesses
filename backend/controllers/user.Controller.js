@@ -41,11 +41,31 @@ export const OnBoardingUser = async (req, res) => {
     user.isOnboarded = true;
     await user.save();
     return Response(res, 201, "Onboarding successfully", {
-      user:UserMapper(user),
+      user: UserMapper(user),
       businessDetails: business,
     });
   } catch (error) {
     console.error("failed to onboarding user", error);
+    return Response(res, 500, "Internal server error");
+  }
+};
+// get business Profile
+export const GetBusinessProfile = async (req, res) => {
+  try {
+    const userId = req.user;
+    // check user exists or not
+    const user = await User.findById(userId);
+    if (!user) {
+      return Response(res, 404, "User not found");
+    }
+    // find business details
+    const business = await Business.findOne({ownerId:userId})
+    if(!business){
+      return Response(res,404,"Business not found")
+    }
+    return Response(res,200,"Business Details",{business})
+  } catch (error) {
+     console.error("failed to get business details", error);
     return Response(res, 500, "Internal server error");
   }
 };
