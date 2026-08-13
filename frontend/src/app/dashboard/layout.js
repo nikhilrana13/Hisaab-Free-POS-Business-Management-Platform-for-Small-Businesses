@@ -1,6 +1,7 @@
 "use client"
 import BottomNavbar from "@/components/dashboard/BottomNavbar";
 import Sidebar from "@/components/dashboard/Sidebar";
+import { LocationProvider } from "@/context/LocationContext";
 import AuthMiddleware from "@/middlewares/AuthMiddleware";
 import React, { useState } from "react";
 
@@ -8,7 +9,8 @@ const layout = ({ children }) => {
 
   return (
     <AuthMiddleware>
-      <div className="flex flex-col bg-[#FAF8FF]">
+    <LocationProvider>
+       <div className="flex flex-col bg-[#FAF8FF]">
       <div className="flex flex-col md:flex-row min-h-screen w-full">
         {/* left side */}
         <div className="hidden xl:block w-full lg:w-[20%]">
@@ -21,6 +23,7 @@ const layout = ({ children }) => {
       </div>
       <BottomNavbar />
     </div>
+    </LocationProvider>
     </AuthMiddleware>
   
   );

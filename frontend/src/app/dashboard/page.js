@@ -1,24 +1,36 @@
 "use client";
+import WeatherCard from "@/components/automation/WeatherCard";
 import QuickactionCard from "@/components/dashboard/QuickactionCard";
 import StatsCard from "@/components/dashboard/StatsCard";
 import StatsCardSkeleton from "@/components/dashboard/StatsCardSkeleton";
 import WelcomeSection from "@/components/dashboard/WelcomeSection";
+import { useLocationProvider } from "@/context/LocationContext";
 import { useGetDashboardStatsQuery } from "@/redux/api/DashboardApi";
 import { formatIndianNumber } from "@/utils/Helpers";
-import {ClipboardList,IndianRupee,PackagePlus,QrCode,ReceiptIndianRupee,ShoppingBag,Wallet,} from "lucide-react";
+import {
+  ClipboardList,
+  IndianRupee,
+  PackagePlus,
+  QrCode,
+  ReceiptIndianRupee,
+  ShoppingBag,
+  Wallet,
+} from "lucide-react";
 import React from "react";
 import { MdOutlineDonutSmall } from "react-icons/md";
 
 const page = () => {
-  const { data, isLoading} = useGetDashboardStatsQuery(undefined,{
-     refetchOnMountOrArgChange: true,
+  const { data, isLoading } = useGetDashboardStatsQuery(undefined, {
+    refetchOnMountOrArgChange: true,
   });
   const statsdata = data?.data?.stats;
+  const {weatherDetails,loading} = useLocationProvider()
+  
 
   const stats = [
     {
       title: "Today's Sales",
-      value: `₹${statsdata?.todaySales ? formatIndianNumber(statsdata?.todaySales) : 0}` ,
+      value: `₹${statsdata?.todaySales ? formatIndianNumber(statsdata?.todaySales) : 0}`,
       icon: IndianRupee,
       iconBg: "#DBEAFE",
       iconColor: "#2563EB",
@@ -81,11 +93,9 @@ const page = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
           {isLoading ? (
             <>
-            {[1,2,3,4,5].map((_,i)=>{
-              return (
-                <StatsCardSkeleton key={i} />
-              )
-            })}
+              {[1, 2, 3, 4, 5].map((_, i) => {
+                return <StatsCardSkeleton key={i} />;
+              })}
             </>
           ) : (
             stats?.map((item) => {
@@ -104,8 +114,21 @@ const page = () => {
           })}
         </div>
       </div>
+      {/* Automation / Weather */}
+      <div className="flex flex-col">
+        <span className="py-5 text-[1.1rem] font-semibold">
+          Business Insights
+        </span>
+
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+          <WeatherCard />
+        </div>
+      </div>
     </div>
   );
 };
 
 export default page;
+
+
+

@@ -29,7 +29,6 @@ export default function RootLayout({ children }) {
        <ToastProvider />
         {children}
         </PersistProvider>
-        
         </body>
     </html>
   );
