@@ -29,6 +29,7 @@ export const LocationProvider = ({ children }) => {
         skip:!location
     })
     const weatherDetails = data?.data?.result || {}
+    const Loading = isLoading
 
     // runs on component mount 
     useEffect(() => {
@@ -54,7 +55,7 @@ export const LocationProvider = ({ children }) => {
     }, []);
 
     return (
-        <LocationContext.Provider value={{ weatherDetails,isLoading}}>
+        <LocationContext.Provider value={{ weatherDetails,Loading}}>
             {children}
         </LocationContext.Provider>
     )

@@ -17,7 +17,7 @@ const page = () => {
     refetchOnMountOrArgChange: true,
   });
   const statsdata = data?.data?.stats;
-  const {weatherDetails,loading} = useLocationProvider()
+  const {weatherDetails,Loading} = useLocationProvider()
   
   
 
@@ -115,7 +115,7 @@ const page = () => {
         </span>
 
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-          {loading? (
+          {Loading? (
             <WeatherCardShimmer />
           ):(
             <WeatherCard 
