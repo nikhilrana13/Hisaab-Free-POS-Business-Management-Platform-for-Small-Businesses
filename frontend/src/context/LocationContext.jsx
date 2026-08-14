@@ -1,6 +1,5 @@
 "use client"
-import { api } from "@/services/api";
-import axios from "axios";
+import { useGetWeatherQuery } from "@/redux/api/WeatherApi";
 import { createContext, useContext, useEffect, useState } from "react";
 
 
@@ -25,45 +24,37 @@ const getUserLocation = () => {
 }
 
 export const LocationProvider = ({ children }) => {
-    const [loading, setloading] = useState(false)
-    const [weatherDetails, setWeatherDetails] = useState({})
+    const [location,setLocation] = useState(null)
+    const {data,isLoading} = useGetWeatherQuery(location,{
+        skip:!location
+    })
+    const weatherDetails = data?.data?.result || {}
 
-    // execute weather details automation
-    const FetchWeatherDetails = async () => {
-        try {
-            setloading(true)
-            let lat = localStorage.getItem("latitude");
-            let lng = localStorage.getItem("longitude");
-            // Location not available in localStorage
-            if (!lat || !lng) {
-                const location = await getUserLocation();
-                lat = location.lat;
-                lng = location.lng;
-                localStorage.setItem("latitude", lat);
-                localStorage.setItem("longitude", lng);
-            }
-            // Trigger FlowPilot workflow
-            const response = await axios.post("https://flowpilot-backend-7xir.onrender.com/api/webhooks/wf_GwqE94DqIw", {
-                latitude: Number(lat),
-                longitude: Number(lng),
-            })
-            if (response.data) {
-                const weatherDetails = response?.data?.data?.result || {}
-                setWeatherDetails(weatherDetails)
-            }
-        } catch (error) {
-            console.error("Failed to fetch weather details:", error);
-        } finally {
-            setloading(false)
-        }
-    }
-    console.log(weatherDetails)
     // runs on component mount 
-    useEffect(()=>{
-        FetchWeatherDetails()
-    },[])
+    useEffect(() => {
+        const latitude = localStorage.getItem("latitude");
+        const longitude = localStorage.getItem("longitude");
+
+        if (latitude && longitude) {
+            setLocation({
+                latitude: Number(latitude),
+                longitude: Number(longitude),
+            });
+        } else {
+            getUserLocation().then((location) => {
+                localStorage.setItem("latitude", location.lat);
+                localStorage.setItem("longitude", location.lng);
+
+                setLocation({
+                    latitude: location.lat,
+                    longitude: location.lng,
+                });
+            });
+        }
+    }, []);
+
     return (
-        <LocationContext.Provider value={{weatherDetails,loading}}>
+        <LocationContext.Provider value={{ weatherDetails,isLoading}}>
             {children}
         </LocationContext.Provider>
     )
