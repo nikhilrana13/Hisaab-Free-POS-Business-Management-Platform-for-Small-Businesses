@@ -1,4 +1,4 @@
-# Hisaab
+# Hisaab 
 
 > A simple and modern business management platform built for small vendors and local businesses.
 
@@ -52,6 +52,10 @@ Designed to work across:
 ---
 
 ## 🛠️ Tech Stack
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white)
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
 
 ### Frontend
 
