@@ -1,5 +1,6 @@
 "use client";
 import WeatherCard from "@/components/automation/WeatherCard";
+import WeatherCardShimmer from "@/components/automation/WeatherCardShimmer";
 import QuickactionCard from "@/components/dashboard/QuickactionCard";
 import StatsCard from "@/components/dashboard/StatsCard";
 import StatsCardSkeleton from "@/components/dashboard/StatsCardSkeleton";
@@ -7,15 +8,7 @@ import WelcomeSection from "@/components/dashboard/WelcomeSection";
 import { useLocationProvider } from "@/context/LocationContext";
 import { useGetDashboardStatsQuery } from "@/redux/api/DashboardApi";
 import { formatIndianNumber } from "@/utils/Helpers";
-import {
-  ClipboardList,
-  IndianRupee,
-  PackagePlus,
-  QrCode,
-  ReceiptIndianRupee,
-  ShoppingBag,
-  Wallet,
-} from "lucide-react";
+import {ClipboardList,IndianRupee,PackagePlus,QrCode,ReceiptIndianRupee,ShoppingBag,Wallet,} from "lucide-react";
 import React from "react";
 import { MdOutlineDonutSmall } from "react-icons/md";
 
@@ -25,6 +18,7 @@ const page = () => {
   });
   const statsdata = data?.data?.stats;
   const {weatherDetails,loading} = useLocationProvider()
+  
   
 
   const stats = [
@@ -121,7 +115,19 @@ const page = () => {
         </span>
 
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-          <WeatherCard />
+          {loading? (
+            <WeatherCardShimmer />
+          ):(
+            <WeatherCard 
+          location={weatherDetails?.location}
+          temperature={weatherDetails?.temperature}
+          condition={weatherDetails?.condition}
+          humidity={weatherDetails?.humidity}
+          windSpeed={weatherDetails?.windSpeed}
+          summary={weatherDetails?.summary}
+           />
+          )}
+          
         </div>
       </div>
     </div>

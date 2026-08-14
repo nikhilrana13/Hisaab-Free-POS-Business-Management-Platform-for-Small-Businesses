@@ -1,8 +1,8 @@
 import React from "react";
-import {Cloud,Droplets,MapPin,Umbrella,Wind,} from "lucide-react";
+import { Cloud, Droplets, MapPin, Umbrella, Wind, } from "lucide-react";
 
-const WeatherCard = ({location = "Mohali",temperature = 31,condition = "Partly Cloudy",humidity = 68,windSpeed = 14,rainChance = 40,
-}) => {
+const WeatherCard = ({ location, temperature, condition, humidity, windSpeed, summary }) => {
+
     return (
         <div className="relative overflow-hidden rounded-3xl border border-[#dbe5f5] bg-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg">
             {/* subtle background decoration */}
@@ -10,13 +10,12 @@ const WeatherCard = ({location = "Mohali",temperature = 31,condition = "Partly C
             <div className="pointer-events-none absolute -bottom-20 -left-16 h-40 w-40 rounded-full bg-[#F8FAFC]" />
 
             <div className="relative p-5 sm:p-6">
-
                 {/* Header */}
                 <div className="flex items-start justify-between gap-4">
                     <div>
                         <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#94a3b8]">
                             <MapPin size={14} className="text-[#2563eb]" />
-                            {location}
+                            {location || "NA"}
                         </div>
 
                         <h3 className="mt-2 text-lg font-bold text-[#0f172a]">
@@ -26,6 +25,11 @@ const WeatherCard = ({location = "Mohali",temperature = 31,condition = "Partly C
                         <p className="mt-1 text-sm text-[#64748b]">
                             Current local conditions
                         </p>
+                        {summary && (
+                            <p className="mt-4 max-w-xl text-sm leading-6 text-[#64748b]">
+                                {summary}
+                            </p>
+                        )}
                     </div>
 
                     {/* Weather icon */}
@@ -37,7 +41,6 @@ const WeatherCard = ({location = "Mohali",temperature = 31,condition = "Partly C
                         />
                     </div>
                 </div>
-
                 {/* Main temperature */}
                 <div className="mt-7 flex items-end gap-3">
                     <span className="text-5xl font-bold tracking-tight text-[#0f172a]">
@@ -54,13 +57,10 @@ const WeatherCard = ({location = "Mohali",temperature = 31,condition = "Partly C
                         </p>
                     </div>
                 </div>
-
                 {/* Divider */}
                 <div className="my-6 h-px bg-[#eef2f7]" />
-
                 {/* Metrics */}
                 <div className="grid grid-cols-3 divide-x divide-[#eef2f7]">
-
                     {/* Humidity */}
                     <div className="px-3 first:pl-0">
                         <div className="flex items-center gap-1.5 text-[#94a3b8]">
@@ -71,7 +71,7 @@ const WeatherCard = ({location = "Mohali",temperature = 31,condition = "Partly C
                         </div>
 
                         <p className="mt-2 text-sm font-bold text-[#0f172a]">
-                            {humidity}%
+                            {humidity || "NA"}%
                         </p>
                     </div>
 
@@ -85,25 +85,10 @@ const WeatherCard = ({location = "Mohali",temperature = 31,condition = "Partly C
                         </div>
 
                         <p className="mt-2 text-sm font-bold text-[#0f172a]">
-                            {windSpeed} km/h
-                        </p>
-                    </div>
-
-                    {/* Rain */}
-                    <div className="px-3 last:pr-0">
-                        <div className="flex items-center gap-1.5 text-[#94a3b8]">
-                            <Umbrella size={15} />
-                            <span className="text-xs font-medium">
-                                Rain
-                            </span>
-                        </div>
-
-                        <p className="mt-2 text-sm font-bold text-[#0f172a]">
-                            {rainChance}%
+                            {windSpeed || "NA"} km/h
                         </p>
                     </div>
                 </div>
-
                 {/* FlowPilot badge */}
                 <div className="mt-6 flex items-center justify-between rounded-2xl bg-[#f8fafc] px-4 py-3">
                     <div>
