@@ -1,5 +1,5 @@
 import { toFile } from "@imagekit/nodejs";
-import { imagekit } from "../config/imagekit.js";
+import { imagekit } from "../config/imageKit.js";
 import multer from "multer";
 
 export const uploadToImageKit = async (file,folder) => {
