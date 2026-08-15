@@ -8,7 +8,6 @@ import { RotatingLines } from 'react-loader-spinner';
 
 
 const AddAndEditProductForm = ({ onClose, isEdit, product }) => {
-    const imgRef = useRef()
     const [previewImage, setPreviewImage] = useState(null)
     const [selectedImage, setSelectedImage] = useState(null)
     const { register, handleSubmit, reset, formState: { errors }, control } = useForm({
@@ -196,8 +195,8 @@ const AddAndEditProductForm = ({ onClose, isEdit, product }) => {
                         <label className="text-xs font-semibold text-[#3d4a3d] ml-1">
                             Upload Image
                         </label>
-                        <div
-                            onClick={() => imgRef.current?.click()}
+                        <label
+                            htmlFor="product-image"
                             className="group mt-3 relative flex h-44 w-full cursor-pointer items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed border-[#dbe2ea] bg-[#f8fafc] transition hover:border-[#2563eb] hover:bg-[#f8fbff]"
                         >
                             {previewImage ? (
@@ -230,13 +229,13 @@ const AddAndEditProductForm = ({ onClose, isEdit, product }) => {
                                 </div>
                             )}
                             <input
-                                ref={imgRef}
+                                id="product-image"
                                 type="file"
                                 accept="image/png,image/jpeg,image/webp"
                                 onChange={handleImageChange}
                                 className="hidden"
                             />
-                        </div>
+                        </label>
                         {isEdit && previewImage && !selectedImage && (
                             <p className="text-xs text-[#64748b]">
                                 Current product image. Click to replace it.
