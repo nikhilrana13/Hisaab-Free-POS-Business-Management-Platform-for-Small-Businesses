@@ -1,5 +1,6 @@
 import { ArrowRight, PlayCircle } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react';
 
 const HeroSection = () => {
@@ -30,10 +31,10 @@ const HeroSection = () => {
 
                 {/* Buttons */}
                 <div className="mb-16 flex w-full flex-col items-center gap-4 sm:w-auto sm:flex-row">
-                    <button className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#2563eb] px-6 py-3 text-[16px] font-medium text-white shadow-md transition hover:bg-[#1d4ed8] active:scale-95 sm:w-auto">
-                        Download App
+                    <Link href={"/auth/signup"} className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#2563eb] px-6 py-3 text-[16px] font-medium text-white shadow-md transition hover:bg-[#1d4ed8] active:scale-95 sm:w-auto">
+                        Abhi Shuru kre
                         <ArrowRight size={20} />
-                    </button>
+                    </Link>
 
                     <button className="flex w-full items-center justify-center gap-2 rounded-lg border border-[#e5e7eb] bg-white px-6 py-3 text-[1rem] font-medium text-[#0f172a] shadow-sm transition hover:bg-[#f8fafc] active:scale-95 sm:w-auto">
                         <PlayCircle size={20} />
