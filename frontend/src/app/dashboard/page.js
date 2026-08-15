@@ -55,13 +55,13 @@ const page = () => {
   const actions = [
     {
       title: "Create New Bill",
-      href: "/dashboard/billing/create",
+      href: "/dashboard/billing",
       icon: ReceiptIndianRupee,
       primary: true,
     },
     {
       title: "Add Product",
-      href: "/dashboard/products/create",
+      href: "/dashboard/products",
       icon: PackagePlus,
       iconColor: "#2563EB",
     },
