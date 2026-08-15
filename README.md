@@ -267,4 +267,4 @@ This project is currently for learning and portfolio purposes.
 
 ## 🔗 Live Demo
 
-Live Link:[https://hisaab-free-pos-business-management-u55r.onrender.com/}
+Live Link:[https://hisaab-free-pos-business-management-u55r.onrender.com}
